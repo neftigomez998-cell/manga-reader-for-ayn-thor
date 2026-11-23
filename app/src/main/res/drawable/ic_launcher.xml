@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Two stacked screens with a page across them, on a red tile. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:fillColor="#E5484D" android:pathData="M14,4h80a10,10 0,0 1,10 10v80a10,10 0,0 1,-10 10h-80a10,10 0,0 1,-10 -10v-80a10,10 0,0 1,10 -10z" />
+    <!-- top screen -->
+    <path android:fillColor="#1A1A22" android:pathData="M22,16h64a4,4 0,0 1,4 4v30a4,4 0,0 1,-4 4h-64a4,4 0,0 1,-4 -4v-30a4,4 0,0 1,4 -4z" />
+    <!-- bottom screen -->
+    <path android:fillColor="#1A1A22" android:pathData="M32,58h44a4,4 0,0 1,4 4v28a4,4 0,0 1,-4 4h-44a4,4 0,0 1,-4 -4v-28a4,4 0,0 1,4 -4z" />
+    <!-- page spanning both -->
+    <path android:fillColor="#F2F2F5" android:pathData="M42,22h24v28h-24z" />
+    <path android:fillColor="#F2F2F5" android:pathData="M42,62h24v26h-24z" />
+    <path android:fillColor="#1A1A22" android:pathData="M45,26h18v3h-18zM45,32h12v3h-12zM45,66h18v3h-18zM45,72h14v3h-14z" />
+</vector>
