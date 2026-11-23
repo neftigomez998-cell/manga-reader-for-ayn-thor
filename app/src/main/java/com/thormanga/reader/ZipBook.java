@@ -35,18 +35,7 @@ final class ZipBook extends Book {
         if (!dir.exists() && !dir.mkdirs()) throw new IOException("Can't create cache folder");
         long size = querySize(c, uri);
         File f = new File(dir, Integer.toHexString(uri.toString().hashCode()) + "_" + size + ".cbz");
-        if (size <= 0 || !f.exists() || f.length() != size) {
-            File tmp = new File(dir, f.getName() + ".part");
-            try (InputStream in = c.getContentResolver().openInputStream(uri);
-                 OutputStream out = new FileOutputStream(tmp)) {
-                if (in == null) throw new IOException("Can't read file");
-                byte[] buf = new byte[256 * 1024];
-                int n;
-                while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
-            }
-            if (f.exists()) f.delete();
-            if (!tmp.renameTo(f)) throw new IOException("Can't cache file");
-        }
+        if (size <= 0 || !f.exists() || f.length() != size) copy(c, uri, f);
         f.setLastModified(System.currentTimeMillis());
         prune(dir, 4);
 
@@ -80,7 +69,21 @@ final class ZipBook extends Book {
         return list;
     }
 
-    private static long querySize(Context c, Uri uri) {
+    /** Copies a document to a local file (via a temporary file, so a failed copy leaves nothing behind). */
+    static void copy(Context c, Uri uri, File dest) throws IOException {
+        File tmp = new File(dest.getParentFile(), dest.getName() + ".part");
+        try (InputStream in = c.getContentResolver().openInputStream(uri);
+             OutputStream out = new FileOutputStream(tmp)) {
+            if (in == null) throw new IOException("Can't read file");
+            byte[] buf = new byte[256 * 1024];
+            int n;
+            while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
+        }
+        if (dest.exists()) dest.delete();
+        if (!tmp.renameTo(dest)) throw new IOException("Can't cache file");
+    }
+
+    static long querySize(Context c, Uri uri) {
         try (Cursor cur = c.getContentResolver().query(uri, new String[]{OpenableColumns.SIZE}, null, null, null)) {
             if (cur != null && cur.moveToFirst() && !cur.isNull(0)) return cur.getLong(0);
         } catch (Exception ignored) {

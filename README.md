@@ -15,10 +15,10 @@ In Split and Strip, tap the **middle** of either screen to show the controls on 
 ## Library
 
 * On first launch, pick the folder where you keep manga. It can be on internal storage or an SD card.
-* **.cbz / .zip** files and **folders of images** (jpg, png, webp, gif, avif, heic) both work. Sub-folders show up as folders.
+* **.cbz / .zip**, **.cbr / .rar** (RAR 4 and older; RAR5 not yet) and **folders of images** (jpg, png, webp, gif, avif, heic) all work. Sub-folders show up as folders.
 * Your page is saved per book. The list shows "Page 12 of 180", or "Finished".
 * You can also open a .cbz straight from a file manager with "Open with → Thor Manga".
-* Not supported: .cbr/.rar, .pdf, .epub.
+* Not supported: .pdf, .epub, RAR5 archives.
 
 ## Controls
 

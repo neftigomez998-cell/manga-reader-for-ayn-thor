@@ -770,7 +770,9 @@ final class Session {
             Book b = null;
             String err = null;
             try {
-                b = e.type == Entry.ARCHIVE ? ZipBook.open(app, e.uri, title) : FolderBook.open(app, t, e.docId, title);
+                if (e.type != Entry.ARCHIVE) b = FolderBook.open(app, t, e.docId, title);
+                else if (Book.isRar(e.name)) b = RarBook.open(app, e.uri, title);
+                else b = ZipBook.open(app, e.uri, title);
             } catch (Throwable x) {
                 err = x.getMessage() != null ? x.getMessage() : x.toString();
             }
@@ -780,14 +782,22 @@ final class Session {
 
     /** Opens a .cbz/.zip handed to the app by a file manager. */
     void openUri(final Uri uri) {
-        String n = queryName(uri);
+        final String n = queryName(uri);
         final String title = n != null ? Book.stripExt(n) : "Book";
         flash("Opening " + title + "…");
         opener.execute(() -> {
             Book b = null;
             String err = null;
             try {
-                b = ZipBook.open(app, uri, title);
+                if (n != null && Book.isRar(n)) {
+                    b = RarBook.open(app, uri, title);
+                } else {
+                    try {
+                        b = ZipBook.open(app, uri, title);
+                    } catch (Exception notZip) {
+                        b = RarBook.open(app, uri, title); // file with no/unknown extension
+                    }
+                }
             } catch (Throwable x) {
                 err = x.getMessage() != null ? x.getMessage() : x.toString();
             }
@@ -968,6 +978,10 @@ final class Session {
 
     private Bitmap loadCover(Uri t, Entry e) throws Exception {
         ContentResolver cr = app.getContentResolver();
+        if (e.type == Entry.ARCHIVE && Book.isRar(e.name)) {
+            // Reading a RAR cover means unpacking the archive; show the cover once it's been opened.
+            return null;
+        }
         if (e.type == Entry.ARCHIVE) {
             InputStream raw = cr.openInputStream(e.uri);
             if (raw == null) return null;

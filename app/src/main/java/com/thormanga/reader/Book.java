@@ -109,7 +109,12 @@ abstract class Book {
 
     static boolean isArchive(String name) {
         String e = ext(name);
-        return e.equals("cbz") || e.equals("zip");
+        return e.equals("cbz") || e.equals("zip") || e.equals("cbr") || e.equals("rar");
+    }
+
+    static boolean isRar(String name) {
+        String e = ext(name);
+        return e.equals("cbr") || e.equals("rar");
     }
 
     static String stripExt(String name) {

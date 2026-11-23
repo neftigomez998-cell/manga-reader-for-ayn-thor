@@ -26,4 +26,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+    packaging {
+        resources {
+            excludes += ['META-INF/versions/**', 'META-INF/LICENSE*', 'META-INF/NOTICE*']
+        }
+    }
+}
+
+dependencies {
+    // Reads .cbr / .rar (RAR 4 and older)
+    implementation 'com.github.junrar:junrar:7.5.5'
 }
